@@ -1,0 +1,8 @@
+FROM debian:10
+
+RUN apt-get update 
+RUN apt-get install -y nginx libnginx-mod-http-fancyindex
+COPY nginx-default.conf /etc/nginx/sites-available/default
+RUN sed -i -e 's@access_log /var/log/nginx/access.log@access_log /dev/stdout@g' -e 's@error_log /var/log/nginx/error.log@error_log /dev/stdout@g' /etc/nginx/nginx.conf
+
+CMD ["nginx", "-g", "daemon off;"]

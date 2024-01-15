@@ -1,0 +1,24 @@
+body, html {
+    background: #fff;
+    font-family: Verdana,Lucida,sans-serif;
+}
+a {
+    color: -webkit-link;
+    cursor: pointer;
+    text-decoration: underline;
+    font-family: Verdana,Lucida,sans-serif;
+}
+th, td {
+    padding: 0em 0.5em;
+}
+td.size, td.date {
+    white-space: nowrap;
+    width: 1%;
+}
+td.size {
+    text-align: right;
+}
+thead > tr > th:nth-child(2), thead > tr > th:nth-child(3) {
+    white-space: nowrap;
+    width: 1% !important;
+}

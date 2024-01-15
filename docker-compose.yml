@@ -1,0 +1,19 @@
+version: "2"
+services:
+  streamripper:
+    build:
+      context: .
+      dockerfile: Dockerfile-streamripper
+    restart: unless-stopped
+    volumes:
+      - ./streamripper-nginx:/root/stream
+    command: '/root/streamripper http://208.85.242.52:8162/ -z -o larger -D "/root/stream/%A - %T" --xs_offset=0 -u "WinampMPEG/5.80, Ultravox/2.1"'
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    ports:
+      - "8088:80"
+    restart: unless-stopped
+    volumes:
+      - ./streamripper-nginx:/usr/share/nginx/html

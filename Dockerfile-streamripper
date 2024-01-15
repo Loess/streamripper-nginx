@@ -1,0 +1,18 @@
+FROM debian:10
+
+RUN apt-get update
+RUN apt-get install -y gcc glib2.0 libogg-dev libvorbis-dev make wget
+
+WORKDIR /root
+RUN wget -O streamripper-1.64.6.tar.gz https://sourceforge.net/projects/streamripper/files/streamripper%20%28current%29/1.64.6/streamripper-1.64.6.tar.gz/download && \
+    tar -xvf streamripper-1.64.6.tar.gz
+
+#"error -28" [SR_ERROR_INVALID_METADATA] fix
+RUN sed -i 's@HTTP/1.1@HTTP/1.0@g' streamripper-1.64.6/lib/http.c && \
+    cd streamripper-1.64.6 && \
+    ./configure && make
+RUN mv /root/streamripper-1.64.6/streamripper /root/streamripper
+
+USER root
+
+CMD ["/root/streamripper", "-h"]
