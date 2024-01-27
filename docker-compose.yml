@@ -6,14 +6,30 @@ services:
       dockerfile: Dockerfile-streamripper
     restart: unless-stopped
     volumes:
-      - ./streamripper-nginx:/root/stream
-    command: '/root/streamripper http://208.85.242.52:8162/ -z -o larger -D "/root/stream/%A - %T" --xs_offset=0 -u "WinampMPEG/5.80, Ultravox/2.1"'
+      - ./streamripper-tmp:/root/stream
+    command: '/root/streamripper ${STREAMRIPPER_ARGS}'
+  notify:
+    build:
+      context: .
+      dockerfile: Dockerfile-notify
+    restart: unless-stopped
+    volumes:
+      - ./streamripper-tmp:/root/from
+      - ./streamripper-nginx:/root/to
+    command: './start.sh /root/from /root/to'
+    environment:
+      - TGBOT_URL=${TGBOT_URL}
+      - TGBOT_CHATID=${TGBOT_CHATID}
+      - WEB_HREF_PREFIX=${WEB_HREF_PREFIX}
+      - CONSOLE_VERBOSE=${CONSOLE_VERBOSE}
+      - DAYS_TO_KEEP_INCOMPLETE=${DAYS_TO_KEEP_INCOMPLETE}
+      - REGEX_2_DEL=${REGEX_2_DEL}
   nginx:
     build:
       context: .
       dockerfile: Dockerfile-nginx
     ports:
-      - "8088:80"
+      - "${NGINX_PORT}:80"
     restart: unless-stopped
     volumes:
       - ./streamripper-nginx:/usr/share/nginx/html

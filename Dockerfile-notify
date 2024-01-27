@@ -1,0 +1,12 @@
+FROM debian:10
+
+RUN apt-get update 
+RUN apt-get install -y inotify-tools curl
+
+WORKDIR /root
+COPY notify.sh start.sh
+RUN chmod a+x start.sh
+
+USER root
+
+CMD ["./start.sh"]
